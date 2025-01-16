@@ -1,77 +1,84 @@
-### Historia de Usuario 1: Inicio del Juego
-- **Escenario 1: Iniciar una nueva partida** 
+### User Story 1: Start the game
+- **Scenario 1: Start a new game** 
 
-    Given que el jugador ha iniciado la aplicación  
-    When el jugador elige iniciar una nueva partida  
-    Then la cuadrícula debe estar vacía y debe tener un tamaño de 3x3  
-    And el jugador debe poder elegir entre jugar como "X" o "O"  
-    And el turno actual debe mostrar "X" o "O"  
+    Given the player has started the application  
+    When the player chooses to start a new game  
+    Then the grid will be empty and have a 3x3 size  
+    And the player will be able to choose to play as "X" or "O"  
+    And the current turn will display "X" or "O"  
+    
 
-### Historia de Usuario 2: Realizar un Movimiento  
-- **Escenario 2: Hacer un movimiento**  
+### User Story 2: Make a move 
+- **Scenario 2: "X" makes a move**  
 
-    Given que el jugador ha iniciado el juego  
-    And el turno actual es "X"  
-    When el jugador hace clic en una casilla vacía  
-    Then la casilla debe mostrar la marca "X"  
-    And el turno debe cambiar al siguiente jugador, "O"  
+    Given the player has started a match  
+    And the current turn is "X"  
+    When the player clicks an empty box 
+    Then the box will show the "X" mark  
+    And the turn will change to the next player, "O" 
 
+- **Scenario 3: "O" makes a move**  
 
-- **Escenario 3: Movimiento en una casilla ya ocupada**  
-
-    Given que el jugador ha iniciado el juego  
-    And la casilla (1,1) tiene la marca "X"  
-    When el jugador hace clic en la casilla (1,1)  
-    Then no debe ocurrir ningún cambio y debe mostrarse un mensaje de error indicando que la casilla está ocupada  
-
-### Historia de Usuario 3: Determinación de Ganador
-- **Escenario 4: Determinar un ganador**  
-
-    Given que el jugador ha realizado al menos dos movimientos  
-    And las marcas del jugador están en la misma fila, columna o diagonal  
-    When el jugador realiza el siguiente movimiento en la casilla vacía para completar 3 marcas consecutivas en esa fila, columna o diagonal  
-    Then el juego debe declarar al jugador "X" como ganador  
-
-- **Escenario 5: Empate**  
-
-    Given que el jugador ha realizado movimientos alternos y todas las casillas están llenas  
-    And no hay tres marcas consecutivas del mismo jugador en ninguna fila, columna o diagonal  
-    When el jugador realiza el último movimiento y todas las casillas están ocupadas  
-    Then el juego debe declarar un empate  
-
-### Historia de Usuario 4: Reiniciar el Juego
-- **Escenario 6: Reiniciar el juego** 
-
-    Given que el jugador ha iniciado el juego  
-    When el jugador hace clic en el botón de reiniciar  
-    Then la cuadrícula debe restablecerse a un estado vacío  
-    And el jugador debe poder seleccionar nuevamente si quiere jugar como "X" o "O"  
-    And el turno debe ser "X" o "O"  
+    Given the player has started a match  
+    And the current turn is "O"  
+    When the player clicks an empty box 
+    Then the box will show the "O" mark  
+    And the turn will change to the next player, "X"  
 
 
-### Historia de Usuario 5: Interfaz de Usuario (UI) Intuitiva
-- **Escenario 7: Ver interfaz intuitiva**  
+- **Scenario 4: Move on a marked box**  
 
-    Given que el jugador ha abierto la aplicación  
-    When visualiza la cuadrícula de Tic-Tac-Toe  
-    Then la cuadrícula debe ser claramente visible y con un diseño limpio  
-    And las casillas deben ser fácilmente seleccionables  
-    And el estado del juego (turno actual, victoria, empate) debe estar claramente visible  
+    Given the player has started a match  
+    And the box (1,1) already had an "X" or "O" mark  
+    When the player clicks the box (1,1)  
+    Then won't be any changes and will show the error message: "The player cannot click on an occupied box".  
+
+### User Story 3: Winner Determination
+- **Scenario 5: Determining a Winner**  
+
+    Given the player has made at least two moves  
+    And the player's marks are in the same row, column, or diagonal  
+    When the player makes the next move in the empty box to complete 3 consecutive marks in that row, column, or diagonal  
+    Then the game must declare the player as the winner and indicate that the game has ended  
+
+- **Scenario 6: Tie**  
+
+    Given the players have alternated moves and all boxes are filled  
+    And there are no three consecutive marks from the same player in any row, column, or diagonal  
+    When the player makes the final move and all boxes are occupied  
+    Then the game must declare a tie  
+
+### User Story 4: Restarting the Game
+- **Scenario 7: Restart the game** 
+
+    Given the player has started the game  
+    When the player clicks the restart button  
+    Then the grid must reset to an empty state  
+    And the player must be able to select again whether to play as "X" or "O"  
+
+### User Story 5: Intuitive User Interface (UI)
+- **Scenario 8: Viewing an Intuitive Interface**  
+
+    Given the player has opened the application  
+    When the player views the Tic-Tac-Toe grid  
+    Then the grid must be clearly visible and have a clean design  
+    And the boxes must be easily selectable  
+    And the game state (current turn, victory, tie) must be clearly visible  
 
 
-### Historia de Usuario 6: Modo de Juego Multijugador Local
-- **Escenario 8: Jugar con otro jugador en el mismo dispositivo**  
+### User Story 6: Local Multiplayer Mode
+- **Scenario 9: Playing with Another Player on the Same Device**
 
-    Given que el jugador ha seleccionado el modo de juego multijugador local  
-    When ambos jugadores hacen clic en las casillas para colocar sus marcas  
-    Then la cuadrícula debe mostrar correctamente las marcas de "X" y "O"  
-    And el turno debe alternarse entre los jugadores después de cada movimiento  
-    And el marcador debe mostrar el estado del juego para ambos jugadores  
+    Given the player has selected the local multiplayer mode  
+    When both players click on boxes to place their marks  
+    Then the grid must correctly display the marks for "X" and "O"  
+    And the turn must alternate between players after each move  
+    And the scoreboard must show the game state for both players  
 
-### Historia de Usuario 7: Modo de Juego contra la Computadora (IA)
-- **Escenario 9: Jugar contra la IA**  
+### User Story 7: Playing Against the Computer (AI)
+- **Scenario 10: Playing Against the AI**
 
-    Given que el jugador ha seleccionado jugar contra la computadora (IA)  
-    And ha seleccionado una dificultad de la IA configurable entre "fácil", "medio" o "difícil"  
-    When el jugador hace un movimiento  
-    Then la IA debe realizar un movimiento válido en la cuadrícula  
+    Given the player has selected to play against the computer (AI)  
+    And has chosen a configurable AI difficulty level (easy, medium, or hard)  
+    When the player makes a move  
+    Then the AI must make a valid move on the grid  
