@@ -102,14 +102,6 @@ public class UserInformation {
     public String getEmail(){
         return email;
     }
-
-    // Method to update user information
-    public void updateInfo(String name, String address, String phone, String email) {
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.email = email;
-    }
 }
 
 public class Order {
@@ -191,7 +183,7 @@ public class Coupon {
     @Override
     public String toString() {
         return "Code: " + code + "\n" +
-               "Discount: " + (discount*100) + "% \n"
+               "Discount: " + (discount*100) + "% \n";
     }
 }
 
