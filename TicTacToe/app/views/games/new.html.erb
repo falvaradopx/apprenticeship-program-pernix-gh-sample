@@ -1,0 +1,39 @@
+<h1>Configurar Partida</h1>
+
+<% if @mode == "singleplayer" %>
+  <form action="/games" method="post">
+    <label>Nombre del jugador:</label>
+    <input type="text" name="player_name" required>
+    
+    <label>Selecciona dificultad:</label>
+    <select name="difficulty">
+      <option value="easy">Fácil</option>
+      <option value="medium">Medio</option>
+      <option value="hard">Difícil</option>
+    </select>
+
+    <button type="submit">Comenzar</button>
+  </form>
+
+<% elsif @mode == "multiplayer" %>
+  <form action="/games" method="post">
+    <label>Jugador 1:</label>
+    <input type="text" name="player1_name" required>
+
+    <label>Simbolo jugador 1:</label>
+    <select type="text" name="player1_symbol" required>
+      <option value="X">X</option>
+      <option value="O">O</option>
+    </select>
+
+    <label>Jugador 2:</label>
+    <input type="text" name="player2_name" required>
+
+    <select type="text" name="player2_symbol" required>
+      <option value="X">X</option>
+      <option value="O">O</option>
+    </select>
+
+    <button type="submit">Comenzar</button>
+  </form>
+<% end %>
