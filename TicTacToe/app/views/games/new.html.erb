@@ -3,8 +3,14 @@
 <% if @mode == "singleplayer" %>
   <form action="/games" method="post">
     <label>Nombre del jugador:</label>
-    <input type="text" name="player_name" required>
+    <input type="text" name="player1_name" required>
     
+    <label>Simbolo jugador:</label>
+    <select type="text" name="player1_symbol" required>
+      <option value="X">X</option>
+      <option value="O">O</option>
+    </select>
+
     <label>Selecciona dificultad:</label>
     <select name="difficulty">
       <option value="easy">Fácil</option>
@@ -36,4 +42,10 @@
 
     <button type="submit">Comenzar</button>
   </form>
+<% end %>
+
+<% if flash[:alert] %>
+  <script>
+    alert("<%= flash[:alert] %>");
+  </script>
 <% end %>

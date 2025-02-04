@@ -6,24 +6,33 @@ class GamesController < ApplicationController
   end
   
   def create
-    player1_name = params[:player1_name]
-    player1_symbol = params[:player1_symbol]
-    player2_name = params[:player2_name].present? ? params[:player2_name] : "IA"
-    player2_symbol = params[:player2_symbol].present? ? params[:player2_symbol] : (params[:player1_symbol] == 'X' ? 'O' : 'X')
-    difficulty = params[:difficulty] if player2_name == "IA"
+    game_params = sanitize_game_params(params)
 
-    #@game = Game.new(player1_name, player1_symbol, player2_name, player2_symbol)
+    player1_name = game_params[:player1_name]     
+    player1_symbol = game_params[:player1_symbol] 
+    player2_name = game_params[:player2_name].presence || "IA"
+    player2_symbol = game_params[:player2_symbol].present? ? game_params[:player2_symbol] : game_params[:player1_symbol] == 'X' ? 'O' : 'X'
+    difficulty = game_params[:difficulty] if player2_name == "IA"
+    
+    puts "hola esta creando #{player1_name} - #{player1_symbol} y #{player2_name} - #{player2_symbol}"
 
-    session[:game] = {
-      player1: { name: player1_name, symbol: player1_symbol },
-      player2: { name: player2_name, symbol: player2_symbol },
-      difficulty: difficulty,
-      board: Array.new(3) { Array.new(3, nil) },
-      current_turn: player1_symbol
-    }
+    @game = Game.new(player1_name, player1_symbol, player2_name, player2_symbol)
 
-    #puts "Creando el juego: #{@game}"
-    redirect_to game_path
+    if @game.valid?
+      session[:game] = {
+        player1: { name: player1_name, symbol: player1_symbol },
+        player2: { name: player2_name, symbol: player2_symbol },
+        difficulty: difficulty,
+        board: @game.board.board,
+        current_turn: player1_symbol
+      }
+      puts "hola esta imprimiendo #{session[:game]}"
+
+      redirect_to game_path
+    else
+      flash[:alert] = @game.errors.full_messages.join(", ")
+      redirect_to games_new_path(mode: difficulty ? "singleplayer" : "multiplayer")
+    end
   end
 
   def show
@@ -42,5 +51,17 @@ class GamesController < ApplicationController
     else
       redirect_to root_path, alert: "No hay juego en curso."
     end
+  end
+
+  private
+
+  def sanitize_game_params(params)
+    params.permit(:player1_name, :player1_symbol, :player2_name, :player2_symbol, :difficulty).transform_values do |value|
+      sanitize(value)
+    end
+  end
+
+  def sanitize(value)
+    value.is_a?(String) ? ActionController::Base.helpers.sanitize(value.strip) : value
   end
 end
