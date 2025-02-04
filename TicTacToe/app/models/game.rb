@@ -23,6 +23,29 @@ class Game
       @player2 = Player.new(player2_name, player2_symbol)
     end
 
+    def switch_turn
+      @current_turn = @current_turn == @player1.symbol ? @player2.symbol : @player1.symbol
+    end
+
+    def make_move(row, col)
+      if @board.make_move(row, col, @current_turn)
+        switch_turn
+        return { status: :ok, message: "Turno cambiado" }
+      else
+        return { status: :error, message: "Casilla ya ocupada" }
+      end
+    end    
+
+    def get_game_data
+      return {
+        "player1" => {"name" => @player1.name, "symbol" => player1.symbol}, 
+        "player2" => {"name" => @player2.name, "symbol" => player2.symbol}, 
+        "difficulty" => @difficulty, 
+        "board" => @board.board, 
+        "current_turn" => @current_turn
+      }
+    end    
+
     private
 
     def unique_symbols

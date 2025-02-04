@@ -60,9 +60,22 @@ class GamesController < ApplicationController
     if game_data
       row, col = params[:row].to_i, params[:col].to_i
 
-      game_data["board"][row][col] = game_data["current_turn"] # Marca la jugada
-      game_data["current_turn"] = game_data["current_turn"] == 'X' ? 'O' : 'X'
-      session[:game] = game_data # Guarda la actualización
+      @game = Game.new(
+        game_data["player1"]["name"], game_data["player1"]["symbol"], 
+        game_data["player2"]["name"], game_data["player2"]["symbol"],
+        game_data["difficulty"],
+        game_data["board"],
+        game_data["current_turn"]
+      )
+
+      result = @game.make_move(row, col)
+
+      if result[:status] == :error
+        flash[:alert] = result[:message] # Muestra error en el frontend
+      else
+        session[:game] = @game.get_game_data # Guarda la actualización
+        flash[:notice] = result[:message] # Muestra mensaje de éxito
+      end
     end
   
     redirect_to game_path
