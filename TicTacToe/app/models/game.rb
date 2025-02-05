@@ -20,8 +20,8 @@ class Game
       @draws = draws
 
       @difficulty = dif
-      @board = Board.new(matrix) # Tablero vacío de 3x3
-      @current_turn = current_turn
+      @board = Board.new(matrix)     # Tablero vacío de 3x3
+      @current_turn = current_turn      
 
       @player1 = Player.new(player1_name, player1_symbol, player1_wins)
       @player2 = Player.new(player2_name, player2_symbol, player2_wins)
