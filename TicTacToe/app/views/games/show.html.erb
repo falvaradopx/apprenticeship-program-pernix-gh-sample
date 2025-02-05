@@ -1,0 +1,20 @@
+<% if @mode == "singleplayer" %>
+  <p>Estás jugando contra la IA en modo <%= @difficulty %></p>
+<% else %>
+  <p>Jugadores: <%= @game.player1.name %> vs <%= @game.player2.name %></p>
+<% end %>
+
+<p>Turno actual <%= @game.current_turn %></p>
+
+
+<table> 
+
+    <% @game.board.board.each_with_index do |row, row_index| %>
+      <tr>
+        <% row.each_with_index do |ceil, col_index| %>
+            <td> <%= button_to "#{ceil}", false, class: "ceil_btn" %> </td>
+        <% end %>
+      </tr>
+    <% end %>
+
+</table>
