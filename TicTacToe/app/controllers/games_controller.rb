@@ -53,6 +53,21 @@ class GamesController < ApplicationController
     end
   end
 
+  
+  def move
+    game_data = session[:game]
+    
+    if game_data
+      row, col = params[:row].to_i, params[:col].to_i
+
+      game_data["board"][row][col] = game_data["current_turn"] # Marca la jugada
+      game_data["current_turn"] = game_data["current_turn"] == 'X' ? 'O' : 'X'
+      session[:game] = game_data # Guarda la actualización
+    end
+  
+    redirect_to game_path
+  end 
+
   private
 
   def sanitize_game_params(params)

@@ -12,7 +12,7 @@
     <% @game.board.board.each_with_index do |row, row_index| %>
       <tr>
         <% row.each_with_index do |ceil, col_index| %>
-            <td> <%= button_to "#{ceil}", false, class: "ceil_btn" %> </td>
+            <td> <%= button_to "#{ceil}", games_move_path(row: row_index, col: col_index), method: :post, class: "ceil_btn" %> </td>
         <% end %>
       </tr>
     <% end %>
