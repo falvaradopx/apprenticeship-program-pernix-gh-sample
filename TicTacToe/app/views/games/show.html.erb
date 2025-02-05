@@ -2,13 +2,15 @@
   <p>Estás jugando contra la IA en modo <%= @difficulty %></p>
 <% else %>
   <p>Jugadores: <%= @game.player1.name %> vs <%= @game.player2.name %></p>
+  <p><%= @game.player1.wins %> a <%= @game.player2.wins %></p>
+  <p><%= @game.draws %> empates</p>
 <% end %>
 
 <p>Turno actual <%= @game.current_turn %></p>
 
+<%= button_to "Reiniciar", games_restart_path(), method: :post, class: "restart_btn" %> 
 
 <table> 
-
     <% @game.board.board.each_with_index do |row, row_index| %>
       <tr>
         <% row.each_with_index do |ceil, col_index| %>
@@ -16,10 +18,10 @@
         <% end %>
       </tr>
     <% end %>
-
 </table>
 
 <% if flash[:notice] %>
+  <%= button_to "Volver a jugar", games_restart_path(), method: :post, class: "restart_btn" %> 
   <script>alert("<%= flash[:notice] %>");</script>
 <% end %>
 <% if flash[:alert] %>

@@ -19,13 +19,7 @@ class GamesController < ApplicationController
     @game = Game.new(player1_name, player1_symbol, player2_name, player2_symbol)
 
     if @game.valid?
-      session[:game] = {
-        player1: { name: player1_name, symbol: player1_symbol },
-        player2: { name: player2_name, symbol: player2_symbol },
-        difficulty: difficulty,
-        board: @game.board.board,
-        current_turn: player1_symbol
-      }
+      session[:game] = @game.get_game_data
       puts "hola esta imprimiendo #{session[:game]}"
 
       redirect_to game_path
@@ -40,19 +34,25 @@ class GamesController < ApplicationController
     puts "hola esta imprimiendo #{game}"
   
     if game.present?
-      @game = Game.new(
-        game["player1"]["name"], game["player1"]["symbol"], 
-        game["player2"]["name"], game["player2"]["symbol"],
-        game["difficulty"],
-        game["board"],
-        game["current_turn"]
-      )
-      
+      @game = load_game_from_session
     else
       redirect_to root_path, alert: "No hay juego en curso."
     end
   end
 
+  def load_game_from_session
+    game_data = session[:game]
+
+    return Game.new(
+      game_data["player1"]["name"], game_data["player1"]["symbol"], 
+      game_data["player2"]["name"], game_data["player2"]["symbol"], 
+      game_data["player1"]["wins"], game_data["player2"]["wins"],
+      game_data["draws"],
+      game_data["difficulty"],
+      game_data["board"],
+      game_data["current_turn"]
+    )
+  end
   
   def move
     game_data = session[:game]
@@ -60,26 +60,30 @@ class GamesController < ApplicationController
     if game_data
       row, col = params[:row].to_i, params[:col].to_i
 
-      @game = Game.new(
-        game_data["player1"]["name"], game_data["player1"]["symbol"], 
-        game_data["player2"]["name"], game_data["player2"]["symbol"],
-        game_data["difficulty"],
-        game_data["board"],
-        game_data["current_turn"]
-      )
+      @game = load_game_from_session
 
       result = @game.make_move(row, col)
 
       if result[:status] == :error
-        flash[:alert] = result[:message] # Muestra error en el frontend
+        flash[:alert] = result[:message]                        # Muestra error en el frontend
+      elsif result[:status] == :win or result[:status] == :draw
+        session[:game] = @game.get_game_data                    # Guarda la actualización
+        flash[:notice] = result[:message]                       # Muestra mensaje de éxito
       else
-        session[:game] = @game.get_game_data # Guarda la actualización
-        flash[:notice] = result[:message] # Muestra mensaje de éxito
+        session[:game] = @game.get_game_data                    # Guarda la actualización
       end
     end
   
     redirect_to game_path
   end 
+
+  def restart
+    puts "Reiniciando.................................."
+    @game = load_game_from_session
+    session[:game] = @game.restart_game.get_game_data
+
+    redirect_to game_path  # Redirige para actualizar la vista
+  end
 
   private
 

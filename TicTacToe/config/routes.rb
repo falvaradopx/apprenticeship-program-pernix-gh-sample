@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   get "game", to: "games#show", as: :game
 
   post 'games/move', to: 'games#move', as: :games_move
-
+  post 'games/restart', to: 'games#restart', as: :games_restart
 end
