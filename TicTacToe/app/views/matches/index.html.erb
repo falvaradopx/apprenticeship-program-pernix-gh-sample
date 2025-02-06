@@ -1,0 +1,23 @@
+<h1>Historial de Partidas</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Jugador 1</th>
+      <th>Jugador 2</th>
+      <th>Dificultad</th>
+      <th>Empates</th>
+      <th>Fecha</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @matches.each do |match| %>
+      <tr>
+        <td><%= match.player1_name %> (<%= match.player1_symbol %>) (<%= match.player1_wins %>)</td>
+        <td><%= match.player2_name %> (<%= match.player2_symbol %>) (<%= match.player2_wins %>)</td>
+        <td><%= match.difficulty || "N/A" %></td>
+        <td><%= match.draws %></td>
+        <td><%= match.updated_at.strftime("%d/%m/%Y %H:%M") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
