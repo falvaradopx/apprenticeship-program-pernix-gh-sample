@@ -8,7 +8,7 @@ class Game
     validate :unique_symbols
     validate :valid_board
 
-    def initialize(player1_name, player1_symbol, player2_name, player2_symbol, player1_wins=0, player2_wins=0, draws = 0, dif = nil, matrix = Array.new(3) { Array.new(3, nil) }, current_turn = player1_symbol)
+    def initialize(player1_name, player1_symbol, player2_name, player2_symbol, dif = nil, player1_wins=0, player2_wins=0, draws = 0, matrix = Array.new(3) { Array.new(3, nil) }, current_turn = player1_symbol)
       puts "hola esta creando #{player1_name} - #{player1_symbol} y #{player2_name} - #{player2_symbol}"
       @player1_name = player1_name
       @player1_symbol = player1_symbol
@@ -57,11 +57,11 @@ class Game
 
     def get_game_data
       return {
-        "player1" => {"name" => @player1.name, "symbol" => player1.symbol, "wins" => player1.wins}, 
-        "player2" => {"name" => @player2.name, "symbol" => player2.symbol, "wins" => player2.wins}, 
+        "player1" => {"name" => @player1.name, "symbol" => @player1.symbol, "wins" => @player1.wins}, 
+        "player2" => {"name" => @player2.name, "symbol" => @player2.symbol, "wins" => @player2.wins}, 
         "draws" => @draws,
         "difficulty" => @difficulty, 
-        "board" => @board.board, 
+        "board" => @board.board,    
         "current_turn" => @current_turn
       }
     end    

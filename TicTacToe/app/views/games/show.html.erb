@@ -22,6 +22,7 @@
 
 <% if flash[:notice] %>
   <%= button_to "Volver a jugar", games_restart_path(), method: :post, class: "restart_btn" %> 
+  <%= button_to "Volver al menu principal", games_exit_path(), method: :post, class: "exit_btn" %> 
   <script>alert("<%= flash[:notice] %>");</script>
 <% end %>
 <% if flash[:alert] %>

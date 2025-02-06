@@ -1,4 +1,5 @@
 <h1>Página principal</h1>
 
-<%= link_to "Single Player", games_new_path(mode: "singleplayer"), class: "mode_selector" %>
-<%= link_to "Local Multiplayer", games_new_path(mode: "multiplayer"), class: "mode_selector" %>
+<%= link_to "Single Player", games_new_path(mode: "singleplayer"), method: "get", class: "mode_selector" %>
+<%= link_to "Local Multiplayer", games_new_path(mode: "multiplayer"), method: "get", class: "mode_selector" %>
+<%= button_to "Historial de partidas", matches_index_path(), method: "get", class: "matches_history_btn" %>
