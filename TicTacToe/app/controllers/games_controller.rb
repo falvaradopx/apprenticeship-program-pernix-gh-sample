@@ -1,8 +1,6 @@
 class GamesController < ApplicationController
-
   def new
     @mode = params[:mode]  # Recibe si es "singleplayer" o "multiplayer"
-    puts "Creando un juego tipo: #{@mode}"
   end
   
   def create
@@ -13,15 +11,11 @@ class GamesController < ApplicationController
     player2_name = game_params[:player2_name].presence || "IA"
     player2_symbol = game_params[:player2_symbol].present? ? game_params[:player2_symbol] : game_params[:player1_symbol] == 'X' ? 'O' : 'X'
     difficulty = game_params[:difficulty] if player2_name == "IA"
-    
-    puts "hola esta creando #{player1_name} - #{player1_symbol} y #{player2_name} - #{player2_symbol} con dificultad #{difficulty}"
 
     @game = Game.new(player1_name, player1_symbol, player2_name, player2_symbol, difficulty)
 
     if @game.valid?
       session[:game] = @game.get_game_data
-      puts "hola esta imprimiendo #{session[:game]}"
-
       redirect_to game_path
     else
       flash[:alert] = @game.errors.full_messages.join(", ")
@@ -59,6 +53,8 @@ class GamesController < ApplicationController
     
     if game_data
       row, col = params[:row].to_i, params[:col].to_i
+      puts "Se pidió movimiento a #{[row, col]}"
+
 
       @game = load_game_from_session
 
@@ -72,6 +68,17 @@ class GamesController < ApplicationController
         flash[:notice] = result[:message]                       # Muestra mensaje de éxito
       else
         session[:game] = @game.get_game_data                    # Guarda la actualización
+        if @game.difficulty 
+          puts "Es partida VS IA -------------------------------------"
+          if @game.current_turn == @game.player2.symbol 
+            row_move, col_move = TictactoeAi.best_move(@game.board.board, @game.player2.symbol, @game.difficulty)
+            puts "La IA mueve a #{[row_move, col_move]}"
+            params[:row] = row_move
+            params[:col] = col_move
+            move
+            return
+          end
+        end
       end
     end
   
@@ -122,7 +129,7 @@ class GamesController < ApplicationController
     match.update!(
       player1_wins: game.player1.wins,
       player2_wins: game.player2.wins,
-      draws: match.draws + game.draws
+      draws: game.draws
     )
   end
   
