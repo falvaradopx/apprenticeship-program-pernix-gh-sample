@@ -8,7 +8,7 @@ class Game
     validate :unique_symbols
     validate :valid_board
 
-    def initialize(player1_name, player1_symbol, player2_name, player2_symbol, dif = nil, player1_wins=0, player2_wins=0, draws = 0, matrix = Array.new(3) { Array.new(3, nil) }, current_turn = player1_symbol)
+    def initialize(player1_name, player1_symbol, player2_name, player2_symbol, dif = nil, player1_wins=0, player2_wins=0, draws = 0, matrix = Array.new(3) { Array.new(3, nil) }, current_turn = player1_symbol, fst_move = player1_symbol)
       puts "hola esta creando #{player1_name} - #{player1_symbol} y #{player2_name} - #{player2_symbol}"
       @player1_name = player1_name
       @player1_symbol = player1_symbol
@@ -21,15 +21,22 @@ class Game
 
       @difficulty = dif
       @board = Board.new(matrix)     # Tablero vacío de 3x3
-      @current_turn = current_turn      
+      @current_turn = current_turn  
+      @first_move = fst_move    
 
       @player1 = Player.new(player1_name, player1_symbol, player1_wins)
       @player2 = Player.new(player2_name, player2_symbol, player2_wins)
     end
 
-    def restart_game
+    def restart_game(type)
       @board.restart
-      @current_turn = player1_symbol
+      if type == "rematch"
+        puts "Es un rematch ---------------------------------------"
+        puts "La partida pasada empezó #{@first_move}"
+        @first_move = @first_move == 'X' ? 'O' : 'X'
+        puts "Ahora va a empezar #{@first_move}"
+      end
+      @current_turn = @first_move
       return self
     end
 
@@ -62,7 +69,8 @@ class Game
         "draws" => @draws,
         "difficulty" => @difficulty, 
         "board" => @board.board,    
-        "current_turn" => @current_turn
+        "current_turn" => @current_turn,
+        "first_move" => @first_move
       }
     end    
 

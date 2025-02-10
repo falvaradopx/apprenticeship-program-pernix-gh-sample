@@ -8,7 +8,7 @@
 
 <p>Turno actual <%= @game.current_turn %></p>
 
-<%= button_to "Reiniciar", games_restart_path(), method: :post, class: "restart_btn" %> 
+<%= button_to "Reiniciar", games_restart_path(type:"restart"), method: :post, class: "restart_btn" %> 
 
 <table> 
     <% @game.board.board.each_with_index do |row, row_index| %>
@@ -21,7 +21,7 @@
 </table>
 
 <% if flash[:notice] %>
-  <%= button_to "Volver a jugar", games_restart_path(), method: :post, class: "restart_btn" %> 
+  <%= button_to "Volver a jugar", games_restart_path(type:"rematch"), method: :post, class: "restart_btn" %> 
   <%= button_to "Volver al menu principal", games_exit_path(), method: :post, class: "exit_btn" %> 
   <script>alert("<%= flash[:notice] %>");</script>
 <% end %>
