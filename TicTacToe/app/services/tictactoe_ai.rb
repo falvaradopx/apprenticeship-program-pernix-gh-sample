@@ -41,6 +41,9 @@ module TictactoeAi
   end
 
   def self.minimax_move(board, ai_symbol, player_symbol)
+    if board.flatten.all?(&:nil?)
+      return [1, 1] if board[1][1].nil?
+    end
     best_score = -Float::INFINITY
     best_move = nil
 

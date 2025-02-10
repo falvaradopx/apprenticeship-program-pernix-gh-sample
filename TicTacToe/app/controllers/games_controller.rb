@@ -25,10 +25,13 @@ class GamesController < ApplicationController
 
   def show
     game = session[:game] || {}  # Asegura que game no sea nil
-    puts "hola esta imprimiendo #{game}"
-  
     if game.present?
       @game = load_game_from_session
+      # Si es un rematch y la IA debe iniciar, hacemos su movimiento antes de renderizar
+      if @game.difficulty && @game.current_turn == @game.player2.symbol && @game.board.board.flatten.all?(&:nil?)
+        result = @game.make_move(0, 0)
+        session[:game] = @game.get_game_data # Guarda el nuevo estado
+      end
     else
       redirect_to root_path, alert: "No hay juego en curso."
     end
@@ -44,7 +47,8 @@ class GamesController < ApplicationController
       game_data["player1"]["wins"], game_data["player2"]["wins"],
       game_data["draws"],
       game_data["board"],
-      game_data["current_turn"]
+      game_data["current_turn"],
+      game_data["first_move"]
     )
   end
   
@@ -54,41 +58,44 @@ class GamesController < ApplicationController
     if game_data
       row, col = params[:row].to_i, params[:col].to_i
       puts "Se pidió movimiento a #{[row, col]}"
-
-
+  
       @game = load_game_from_session
-
       result = @game.make_move(row, col)
-
+  
       if result[:status] == :error
-        flash[:alert] = result[:message]                        # Muestra error en el frontend
-      elsif result[:status] == :win or result[:status] == :draw
-        session[:game] = @game.get_game_data                    # Guarda la actualización
-        save_match(@game)  # Guarda o actualiza el marcador
-        flash[:notice] = result[:message]                       # Muestra mensaje de éxito
+        flash[:alert] = result[:message] # Muestra error en el frontend
       else
-        session[:game] = @game.get_game_data                    # Guarda la actualización
-        if @game.difficulty 
-          puts "Es partida VS IA -------------------------------------"
-          if @game.current_turn == @game.player2.symbol 
-            row_move, col_move = TictactoeAi.best_move(@game.board.board, @game.player2.symbol, @game.difficulty)
-            puts "La IA mueve a #{[row_move, col_move]}"
-            params[:row] = row_move
-            params[:col] = col_move
-            move
-            return
-          end
+        session[:game] = @game.get_game_data # Guarda el nuevo estado
+        if result[:status] == :win or result[:status] == :draw
+          save_match(@game)  # Guarda o actualiza el marcador
+          flash[:notice] = result[:message] # Muestra mensaje de éxito
+        elsif @game.difficulty && @game.current_turn == @game.player2.symbol
+          handle_ai_move
         end
       end
     end
   
     redirect_to game_path
-  end 
+  end
+
+  def handle_ai_move
+    row_move, col_move = TictactoeAi.best_move(@game.board.board, @game.player2.symbol, @game.difficulty)
+    puts "La IA mueve a #{[row_move, col_move]}"
+  
+    result = @game.make_move(row_move, col_move)
+    session[:game] = @game.get_game_data # Guarda el nuevo estado
+  
+    if result[:status] == :win or result[:status] == :draw
+      save_match(@game)
+      flash[:notice] = result[:message]
+    end
+  end
 
   def restart
     puts "Reiniciando.................................."
     @game = load_game_from_session
-    session[:game] = @game.restart_game.get_game_data
+    @type = params[:type]
+    session[:game] = @game.restart_game(@type).get_game_data
 
     redirect_to game_path  # Redirige para actualizar la vista
   end
