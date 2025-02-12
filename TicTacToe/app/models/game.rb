@@ -1,14 +1,14 @@
 class Game
     include ActiveModel::Model
 
-    attr_accessor :player1, :player1_name, :player2_name,:player1_symbol, :player2_symbol,:player2, :draws, :difficulty, :board, :current_turn
+    attr_accessor :player1, :player1_name, :player2_name,:player1_symbol, :player2_symbol,:player2, :draws, :difficulty, :board, :current_turn, :winner
 
     validates :player1_name, :player2_name, presence: true, length: { maximum: 20 }
     validates :player1_symbol, :player2_symbol, presence: true, inclusion: { in: ["X", "O"] }
     validate :unique_symbols
     validate :valid_board
 
-    def initialize(player1_name, player1_symbol, player2_name, player2_symbol, dif = nil, player1_wins=0, player2_wins=0, draws = 0, matrix = Array.new(3) { Array.new(3, nil) }, current_turn = player1_symbol, fst_move = player1_symbol)
+    def initialize(player1_name, player1_symbol, player2_name, player2_symbol, dif = nil, player1_wins=0, player2_wins=0, draws = 0, matrix = Array.new(3) { Array.new(3, nil) }, current_turn = player1_symbol, fst_move = player1_symbol, winner = nil)
       puts "hola esta creando #{player1_name} - #{player1_symbol} y #{player2_name} - #{player2_symbol}"
       @player1_name = player1_name
       @player1_symbol = player1_symbol
@@ -23,6 +23,7 @@ class Game
       @board = Board.new(matrix)     # Tablero vacío de 3x3
       @current_turn = current_turn  
       @first_move = fst_move    
+      @winner = winner
 
       @player1 = Player.new(player1_name, player1_symbol, player1_wins)
       @player2 = Player.new(player2_name, player2_symbol, player2_wins)
@@ -30,6 +31,7 @@ class Game
 
     def restart_game(type)
       @board.restart
+      @winner = nil
       if type == "rematch"
         puts "Es un rematch ---------------------------------------"
         puts "La partida pasada empezó #{@first_move}"
@@ -49,6 +51,7 @@ class Game
         if @board.winner?
           @player_winner = @current_turn == @player1.symbol ? @player1 : @player2
           @player_winner.wins += 1
+          @winner = @player_winner
           return { status: :win, message: "Ha ganado el jugador #{@player_winner.name} (#{@player_winner.symbol})" }
         elsif @board.draw?
           @draws += 1
@@ -70,7 +73,8 @@ class Game
         "difficulty" => @difficulty, 
         "board" => @board.board,    
         "current_turn" => @current_turn,
-        "first_move" => @first_move
+        "first_move" => @first_move,
+        "winner" => @winner
       }
     end    
 

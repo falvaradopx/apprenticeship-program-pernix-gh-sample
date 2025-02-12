@@ -8,3 +8,12 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+ :root {
+    --color-bg: #121212; /* Fondo oscuro */
+    --color-text: #ffffff; /* Texto principal */
+    --color-primary: #ff6a00; /* Naranja neón */
+    --color-primary-hover: #cc5500; /* Naranja más oscuro */
+    --color-secondary: #00aaff; /* Azul neón */
+    --color-secondary-hover: #0088cc; /* Azul más oscuro */
+  }
+  

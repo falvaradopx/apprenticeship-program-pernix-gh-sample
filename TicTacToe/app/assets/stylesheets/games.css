@@ -1,6 +1,206 @@
-.ceil_btn {
-    background-color: gray;
-    height: 50px;
-    width: 50px;
+/* ------------------------------------- Index page styles (mode selector view) ------------------------------------- */
+/* Definimos variables de color */ 
+  /* Estilos Globales */
+  body {
+    background: url('tic-tac-toe-bg.png'), linear-gradient(-45deg, #0f0f0f, #1a1a1a, #121212, #1e1e1e);
+    background-size: cover;
+    animation: bg-animation 10s infinite alternate;
+    color: var(--color-text);
+    font-family: "Roboto", sans-serif;
+    text-align: center;
+    margin: 0;
+    height: 100vh;
     display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Animación de fondo */
+  @keyframes bg-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  /* Título con efecto de neón más llamativo */
+  .game-name {
+    font-size: 5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    text-shadow: 0 0 20px var(--color-primary), 0 0 40px var(--color-primary), 0 0 60px var(--color-primary);
+    animation: neon-glow 1.5s infinite alternate;
+  }
+  
+  /* Ajuste del título en tres líneas */
+  .game-name span {
+    display: block;
+  }
+  
+  /* Fuente personalizada para el título */
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  
+  .game-name {
+    font-family: "Press Start 2P", cursive;
+  }
+  
+  /* Animación del título */
+  @keyframes neon-glow {
+    0% {
+      text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary);
+    }
+    100% {
+      text-shadow: 0 0 30px var(--color-primary), 0 0 50px var(--color-primary);
+    }
+  }
+  
+  /* Estilos generales para los botones */
+  .mode-selector, .matches-history-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Botón modo de juego */
+  .mode-selector {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    box-shadow: 0 0 15px var(--color-primary);
+  }
+  
+  /* Botón historial */
+  .matches-history-btn {
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    box-shadow: 0 0 15px var(--color-secondary);
+  }
+  
+  /* Efecto al pasar el mouse (hover) */
+  .mode-selector:hover,
+  .matches-history-btn:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Brillo extra en hover */
+  .mode-selector:hover {
+    background-color: var(--color-primary-hover);
+    box-shadow: 0 0 25px var(--color-primary-hover);
+  }
+  
+  .matches-history-btn:hover {
+    background-color: var(--color-secondary-hover);
+    box-shadow: 0 0 25px var(--color-secondary-hover);
+  }
+  
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ---------------------------------------- New page styles (Player's forms) ---------------------------------------- */
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ----------------------------------------- Show page styles (Matrix view) ----------------------------------------- */
+.matrix{
+    margin: auto;
 }
+
+.circle-mark {
+    color: rgb(255, 98, 0);
+    text-shadow: #12f33f;
+}
+
+.ex-mark {
+    color: rgb(0, 89, 255);
+    text-shadow: #12f33f;
+}
+
+.ceil_btn {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    border: gray 1px solid;
+    align-items: center;
+    justify-content: center;
+    font-size: 90px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 900;
+}
+
+.modal {
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+.modal-content {
+    background-color: white;
+    margin: 15% auto; 
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    text-align: center;
+}
+  
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+  
+.close-btn:hover {
+    color: black;
+}
+
+.players-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .player-card {
+    width: 150px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #7f7f7f;
+    transition: 0.3s;
+  }
+
+  .main-container {
+    flex-direction: row;
+  }
+  
+  .active-turn {
+    border-color: #3bf312; /* Amarillo para destacar el turno */
+    box-shadow: 0px 0px 10px #12f33f;
+  }
+  
+  .turn-indicator {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .winner-message {
+    font-size: 20px;
+    font-weight: bold;
+    color: green;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+/* ------------------------------------------------------------------------------------------------------------------ */

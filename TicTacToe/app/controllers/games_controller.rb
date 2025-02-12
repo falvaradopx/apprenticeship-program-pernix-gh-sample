@@ -48,7 +48,8 @@ class GamesController < ApplicationController
       game_data["draws"],
       game_data["board"],
       game_data["current_turn"],
-      game_data["first_move"]
+      game_data["first_move"],
+      game_data["winner"]
     )
   end
   
@@ -68,7 +69,10 @@ class GamesController < ApplicationController
         session[:game] = @game.get_game_data # Guarda el nuevo estado
         if result[:status] == :win or result[:status] == :draw
           save_match(@game)  # Guarda o actualiza el marcador
-          flash[:notice] = result[:message] # Muestra mensaje de éxito
+          if result[:status] == :draw
+            session[:draw] = true
+            #flash[:notice] = result[:message] # Muestra mensaje de éxito
+          end
         elsif @game.difficulty && @game.current_turn == @game.player2.symbol
           handle_ai_move
         end
@@ -85,9 +89,11 @@ class GamesController < ApplicationController
     result = @game.make_move(row_move, col_move)
     session[:game] = @game.get_game_data # Guarda el nuevo estado
   
-    if result[:status] == :win or result[:status] == :draw
+    if result[:status] == :win 
       save_match(@game)
-      flash[:notice] = result[:message]
+    elsif result[:status] == :draw
+      session[:draw] = true
+      #flash[:notice] = result[:message]
     end
   end
 
@@ -96,7 +102,7 @@ class GamesController < ApplicationController
     @game = load_game_from_session
     @type = params[:type]
     session[:game] = @game.restart_game(@type).get_game_data
-
+    session[:draw] = false
     redirect_to game_path  # Redirige para actualizar la vista
   end
 

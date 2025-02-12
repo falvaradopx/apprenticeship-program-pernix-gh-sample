@@ -1,30 +1,72 @@
-<% if @mode == "singleplayer" %>
-  <p>Estás jugando contra la IA en modo <%= @difficulty %></p>
-<% else %>
-  <p>Jugadores: <%= @game.player1.name %> vs <%= @game.player2.name %></p>
-  <p><%= @game.player1.wins %> a <%= @game.player2.wins %></p>
-  <p><%= @game.draws %> empates</p>
-<% end %>
+<div class="main-container">
+  <!--
+  <% if @mode == "singleplayer" %>
+    <p>Estás jugando contra la IA en modo <%= @difficulty %></p>
+  <% else %>
+    <p><%= @game.draws %> empates</p>
+  <% end %>
+  -->
+  <%= button_to "Volver al menú principal", games_exit_path, method: :post, class: "modal_btn" %> 
 
-<p>Turno actual <%= @game.current_turn %></p>
+  <!-- Contenedor de jugadores -->
+  <div class="players-container">
+    <% [@game.player1, @game.player2].each do |player| %>
+      <div class="player-card <%= 'active-turn' if @game.current_turn == player.symbol %>">
+        <h3><%= player.name %></h3>
+        <p>Símbolo: <strong><%= player.symbol %></strong></p>
+        <p>Victorias: <strong><%= player.wins %></strong></p>
+      </div>
+    <% end %>
+  </div>
+  <!--
+    <p class="turn-indicator">Turno actual: <%= @game.current_turn %></p>
+  -->
+  <% if @game.winner or session[:draw]  %>
+    <%= button_to "Volver a jugar", games_restart_path(type: "rematch"), method: :post, class: "modal_btn" %> 
+  <% else %>
+    <%= button_to "Reiniciar", games_restart_path(type: "restart"), method: :post, class: "restart_btn" %> 
+  <% end %>
 
-<%= button_to "Reiniciar", games_restart_path(type:"restart"), method: :post, class: "restart_btn" %> 
-
-<table> 
+  <!-- Tablero del juego -->
+  <table class="matrix"> 
     <% @game.board.board.each_with_index do |row, row_index| %>
       <tr>
         <% row.each_with_index do |ceil, col_index| %>
-            <td> <%= button_to "#{ceil}", games_move_path(row: row_index, col: col_index), method: :post, class: "ceil_btn" %> </td>
+          <td>
+          <div class = "<%='circle-mark' if ceil == 'O'%> <%='ex-mark' if ceil == 'X'%>">
+            <%= button_to "#{ceil}", games_move_path(row: row_index, col: col_index), method: :post, class: "ceil_btn", disabled:(@game.winner.present? or session[:draw])%>
+          </div>
+          </td>
         <% end %>
       </tr>
     <% end %>
-</table>
+  </table>
+</div>
 
-<% if flash[:notice] %>
-  <%= button_to "Volver a jugar", games_restart_path(type:"rematch"), method: :post, class: "restart_btn" %> 
-  <%= button_to "Volver al menu principal", games_exit_path(), method: :post, class: "exit_btn" %> 
-  <script>alert("<%= flash[:notice] %>");</script>
+<!-- Mensaje de ganador -->
+<% if @game.winner %>
+  <p class="winner-message">🎉 Ganó el jugador <strong><%= @game.winner["name"] %></strong> 🎉</p>
 <% end %>
+<% if session[:draw] %>
+  <p class="winner-message">🎉 Empate 🎉</p>
+<% end %>
+
+<!-- Modal para mensajes de error o alertas -->
 <% if flash[:alert] %>
-  <script>alert("<%= flash[:alert] %>");</script>
+  <div id="resultModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <p><%= flash[:notice] || flash[:alert] %></p> 
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("resultModal").style.display = "block";
+    });
+
+    function closeModal() {
+      document.getElementById("resultModal").style.display = "none";
+    }
+  </script>
 <% end %>
