@@ -5,21 +5,31 @@ class GamesController < ApplicationController
   
   def create
     game_params = sanitize_game_params(params)
-
+    puts "Parametros #{game_params}"
     player1_name = game_params[:player1_name]     
     player1_symbol = game_params[:player1_symbol] 
     player2_name = game_params[:player2_name].presence || "IA"
     player2_symbol = game_params[:player2_symbol].present? ? game_params[:player2_symbol] : game_params[:player1_symbol] == 'X' ? 'O' : 'X'
-    difficulty = game_params[:difficulty] if player2_name == "IA"
+    difficulty = game_params[:difficulty] unless game_params[:player2_name].presence
 
-    @game = Game.new(player1_name, player1_symbol, player2_name, player2_symbol, difficulty)
-
+    @game = Game.new(player1_name, player1_symbol, player2_name, player2_symbol, lvl_difficulty(difficulty))
+    puts "Juego creado: #{@game.get_game_data}"
     if @game.valid?
       session[:game] = @game.get_game_data
       redirect_to game_path
     else
       flash[:alert] = @game.errors.full_messages.join(", ")
       redirect_to games_new_path(mode: difficulty ? "singleplayer" : "multiplayer")
+    end
+  end
+
+  def lvl_difficulty(lvl)
+    case lvl
+    when "0" then "easy"
+    when "1" then "medium"
+    when "2" then "hard"
+    else 
+      nil
     end
   end
 

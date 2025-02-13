@@ -15,5 +15,7 @@
     --color-primary-hover: #cc5500; /* Naranja más oscuro */
     --color-secondary: #00aaff; /* Azul neón */
     --color-secondary-hover: #0088cc; /* Azul más oscuro */
+    --color-border: #444;
+    --color-hover: #ffcc00;
   }
   

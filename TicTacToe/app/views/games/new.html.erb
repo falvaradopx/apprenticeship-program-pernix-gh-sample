@@ -1,55 +1,178 @@
-<h1>Configurar Partida</h1>
+<div class="new-game-container">
+<h1>Configure game</h1>
 
 <% if @mode == "singleplayer" %>
-  <form action="/games" method="post">
-    <label for="player1_name">Nombre del jugador:</label>
-    <input type="text" id="player1_name" name="player1_name" required>
+<form action="/games" method="post">
+  <div class="content">
+    <div class="player-info player1">
+      <h3>Player</h3>
+      <label for="player1_name">Name</label>
+      <input type="text" id="player1_name" name="player1_name" required>
 
-    <label>Símbolo del jugador:</label>
-    <div class="symbol-selection">
-      <input type="radio" id="symbol_x" name="player1_symbol" value="X" required>
-      <label for="symbol_x" class="symbol-btn">X</label>
+      <label>Symbol</label>
+      <div class="symbol-selection">
+        <input type="radio" id="p_x" name="player1_symbol" value="X" required onclick="singlePlayerSymbolSelect('p_x')">
+        <label for="p_x" class="symbol-btn x">X</label>
 
-      <input type="radio" id="symbol_o" name="player1_symbol" value="O" required>
-      <label for="symbol_o" class="symbol-btn">O</label>
+        <input type="radio" id="p_o" name="player1_symbol" value="O" required onclick="singlePlayerSymbolSelect('p_o')">
+        <label for="p_o" class="symbol-btn o">O</label>
+      </div>
     </div>
+    <div class="difficulty-info">
+      <div class="difficulty-container">
+        <h3 class="difficulty-title">Bot Difficulty</h3>
+        <div class="difficulty-display">
+          <img id="difficulty-image" src="/assets/easy-f6589c40.png" alt="Easy">
+        </div>
 
-    <label>Selecciona dificultad:</label>
-    <div class="difficulty-selection">
-      <input type="radio" id="easy" name="difficulty" value="easy" required>
-      <label for="easy" class="difficulty-btn">Fácil</label>
-
-      <input type="radio" id="medium" name="difficulty" value="medium" required>
-      <label for="medium" class="difficulty-btn">Medio</label>
-
-      <input type="radio" id="hard" name="difficulty" value="hard" required>
-      <label for="hard" class="difficulty-btn">Difícil</label>
+        <div class="difficulty-slider">
+          <input type="range" id="difficulty-range" min="0" max="2" step="1" value="0">
+          <div class="slider-labels">
+            <span>Easy</span>
+            <span>Medium</span>
+            <span>Impossible</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <button type="submit">Comenzar</button>
+</form>
 
-    <button type="submit">Comenzar</button>
-  </form>
 <% elsif @mode == "multiplayer" %>
   <form action="/games" method="post">
-    <label>Jugador 1:</label>
-    <input type="text" name="player1_name" required>
+  <div class="content">
+    <div class="player-info player1">
+      <h3>Player 1</h3>
+      <label for="player1_name">Name</label>
+      <input type="text" id="player1_name" name="player1_name" required>
 
-    <label>Simbolo jugador 1:</label>
-    <select type="text" name="player1_symbol" required>
-      <option value="X">X</option>
-      <option value="O">O</option>
-    </select>
+      <label>Symbol</label>
+      <div class="symbol-selection">
+        <input type="radio" id="p1_x" name="player1_symbol" value="X" required onclick="autoSelect('p1_x')">
+        <label for="p1_x" class="symbol-btn x">X</label>
 
-    <label>Jugador 2:</label>
-    <input type="text" name="player2_name" required>
+        <input type="radio" id="p1_o" name="player1_symbol" value="O" required onclick="autoSelect('p1_o')">
+        <label for="p1_o" class="symbol-btn o">O</label>
+      </div>
+    </div>
 
-    <select type="text" name="player2_symbol" required>
-      <option value="X">X</option>
-      <option value="O">O</option>
-    </select>
+    <div class="player-info player2">
+      <h3>Player 2</h3>
+
+      <label for="player2_name">Name</label>
+      <input type="text" id="player2_name" name="player2_name" required>
+
+      <label>Symbol</label>
+      <div class="symbol-selection">
+        <input type="radio" id="p2_x" name="player2_symbol" value="X" required onclick="autoSelect('p2_x')">
+        <label for="p2_x" class="symbol-btn x">X</label>
+
+        <input type="radio" id="p2_o" name="player2_symbol" value="O" required onclick="autoSelect('p2_o')">
+        <label for="p2_o" class="symbol-btn o">O</label>
+      </div>
+    </div>
+
+  </div>
+
 
     <button type="submit">Comenzar</button>
   </form>
+</div>
 <% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const difficultyRange = document.getElementById("difficulty-range");
+    const difficultyImage = document.getElementById("difficulty-image");
+
+    const difficultyImages = [
+      "/assets/easy-f6589c40.png",      // Fácil
+      "/assets/medium-8cc64828.png",    // Medio
+      "/assets/hard-286a9100.png"       // Imposible
+    ];
+
+    difficultyRange.addEventListener("input", function () {
+      const difficultyInfo = document.querySelector('.difficulty-info');
+
+      // Limpiamos las sombras anteriores
+      difficultyInfo.classList.remove('easy-selected', 'medium-selected', 'hard-selected');
+
+      const difficultyIndex = parseInt(difficultyRange.value);
+
+      switch (difficultyIndex) {
+        case 0:
+          difficultyInfo.classList.add('easy-selected');  // Aplica sombra verde al container
+          break;
+        case 1:
+          difficultyInfo.classList.add('medium-selected');  // Aplica sombra amarilla al container
+          break;
+        case 2:
+          difficultyInfo.classList.add('hard-selected');  // Aplica sombra roja al container
+          break;
+      }
+
+      // Aplica transición suave a la imagen
+      difficultyImage.style.opacity = "0"; // Desvanece la imagen antes de cambiarla
+
+      setTimeout(() => {
+        difficultyImage.src = difficultyImages[difficultyIndex]; // Cambia la imagen
+        difficultyImage.style.opacity = "1"; // Vuelve a mostrarla
+      }, 200); // Espera 200ms antes de cambiar la imagen para hacer el fade más natural
+    });
+  });
+
+
+  function autoSelect(selectedId) {
+    const p1X = document.getElementById("p1_x");
+    const p1O = document.getElementById("p1_o");
+    const p2X = document.getElementById("p2_x");
+    const p2O = document.getElementById("p2_o");
+
+    const player1Info = document.querySelector('.player-info.player1');
+    const player2Info = document.querySelector('.player-info.player2');
+
+    // Limpiamos las sombras anteriores
+    player1Info.classList.remove('x-selected', 'o-selected');
+    player2Info.classList.remove('x-selected', 'o-selected');
+
+    // Lógica de selección de símbolos
+    if (selectedId === "p1_x") {
+      p2O.checked = true;  // Seleccionamos automáticamente O para el jugador 2
+      player1Info.classList.add('x-selected');  // Aplica sombra azul a Player 1
+      player2Info.classList.add('o-selected');  // Aplica sombra naranja a Player 2
+    } else if (selectedId === "p1_o") {
+      p2X.checked = true;  // Seleccionamos automáticamente X para el jugador 2
+      player1Info.classList.add('o-selected');  // Aplica sombra naranja a Player 1
+      player2Info.classList.add('x-selected');  // Aplica sombra azul a Player 2
+    } else if (selectedId === "p2_x") {
+      p1O.checked = true;  // Seleccionamos automáticamente O para el jugador 1
+      player2Info.classList.add('x-selected');  // Aplica sombra azul a Player 2
+      player1Info.classList.add('o-selected');  // Aplica sombra naranja a Player 1
+    } else if (selectedId === "p2_o") {
+      p1X.checked = true;  // Seleccionamos automáticamente X para el jugador 1
+      player2Info.classList.add('o-selected');  // Aplica sombra naranja a Player 2
+      player1Info.classList.add('x-selected');  // Aplica sombra azul a Player 1
+    }
+  }
+
+  function singlePlayerSymbolSelect(selectedId) {
+    const pX = document.getElementById("p_x");
+    const pO = document.getElementById("p_o");
+
+    const playerInfo = document.querySelector('.player-info.player1');
+
+    // Limpiamos las sombras anteriores
+    playerInfo.classList.remove('x-selected', 'o-selected');
+
+    // Lógica de selección de símbolos
+    if (selectedId === "p_x") {
+      playerInfo.classList.add('x-selected');  // Aplica sombra azul a Player 1
+    } else if (selectedId === "p_o") {
+      playerInfo.classList.add('o-selected');  // Aplica sombra naranja a Player 1
+    }
+  }
+</script>
 
 <% if flash[:alert] %>
   <script>

@@ -32,7 +32,7 @@
     <% @game.board.board.each_with_index do |row, row_index| %>
       <tr>
         <% row.each_with_index do |ceil, col_index| %>
-          <td class = "<%='circle-mark' if ceil == 'O'%> <%='ex-mark' if ceil == 'X'%>">
+          <td class = "<%='circle-mark' if ceil == 'O'%> <%='ex-mark' if ceil == 'X'%>" >
           <div class = "<%='circle-mark' if ceil == 'O'%> <%='ex-mark' if ceil == 'X'%>">
             <%= button_to "#{ceil}", games_move_path(row: row_index, col: col_index), method: :post, class: "ceil_btn ", disabled:(@game.winner.present? or session[:draw])%>
           </div>

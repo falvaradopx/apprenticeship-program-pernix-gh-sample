@@ -1,15 +1,22 @@
 module TictactoeAi
   def self.best_move(board, ai_symbol, difficulty)
     player_symbol = ai_symbol == 'X' ? 'O' : 'X'
-
+    puts "IA planeando un movimiento de dificultad: #{difficulty}"
     case difficulty
     when "easy"
+      puts "Entro en easy"
       random_move(board)
     when "medium"
+      puts "Entro en medium"
+
       smart_move(board, ai_symbol, player_symbol)
     when "hard"
+      puts "Entro en hard"
+
       minimax_move(board, ai_symbol, player_symbol)
     else
+      puts "No entró en ninguno"
+
       random_move(board)
     end
   end
