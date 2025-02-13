@@ -1,7 +1,9 @@
-<div class="index-container">
-    <h1 class="game-name">Tic Tac Toe</h1>
+<div class="bg-index-container">
+    <div class="index-container">
+        <h1 class="game-name">Tic<br>Tac<br>Toe<br></h1>
 
-    <%= link_to "Single Player", games_new_path(mode: "singleplayer"), method: "get", class: "mode-selector" %>
-    <%= link_to "Local Multiplayer", games_new_path(mode: "multiplayer"), method: "get", class: "mode-selector" %>
-    <%= link_to "Historial de partidas", matches_index_path(), method: "get", class: "matches-history-btn" %>
+        <%= link_to "Single Player", games_new_path(mode: "singleplayer"), method: "get", class: "mode-selector" %>
+        <%= link_to "Local Multiplayer", games_new_path(mode: "multiplayer"), method: "get", class: "mode-selector" %>
+        <%= link_to "Historial de partidas", matches_index_path(), method: "get", class: "matches-history-btn" %>
+    </div>
 </div>

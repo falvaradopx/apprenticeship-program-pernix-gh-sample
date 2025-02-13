@@ -2,25 +2,32 @@
 
 <% if @mode == "singleplayer" %>
   <form action="/games" method="post">
-    <label>Nombre del jugador:</label>
-    <input type="text" name="player1_name" required>
-    
-    <label>Simbolo jugador:</label>
-    <select type="text" name="player1_symbol" required>
-      <option value="X">X</option>
-      <option value="O">O</option>
-    </select>
+    <label for="player1_name">Nombre del jugador:</label>
+    <input type="text" id="player1_name" name="player1_name" required>
+
+    <label>Símbolo del jugador:</label>
+    <div class="symbol-selection">
+      <input type="radio" id="symbol_x" name="player1_symbol" value="X" required>
+      <label for="symbol_x" class="symbol-btn">X</label>
+
+      <input type="radio" id="symbol_o" name="player1_symbol" value="O" required>
+      <label for="symbol_o" class="symbol-btn">O</label>
+    </div>
 
     <label>Selecciona dificultad:</label>
-    <select name="difficulty">
-      <option value="easy">Fácil</option>
-      <option value="medium">Medio</option>
-      <option value="hard">Difícil</option>
-    </select>
+    <div class="difficulty-selection">
+      <input type="radio" id="easy" name="difficulty" value="easy" required>
+      <label for="easy" class="difficulty-btn">Fácil</label>
+
+      <input type="radio" id="medium" name="difficulty" value="medium" required>
+      <label for="medium" class="difficulty-btn">Medio</label>
+
+      <input type="radio" id="hard" name="difficulty" value="hard" required>
+      <label for="hard" class="difficulty-btn">Difícil</label>
+    </div>
 
     <button type="submit">Comenzar</button>
   </form>
-
 <% elsif @mode == "multiplayer" %>
   <form action="/games" method="post">
     <label>Jugador 1:</label>

@@ -1,108 +1,158 @@
 /* ------------------------------------- Index page styles (mode selector view) ------------------------------------- */
 /* Definimos variables de color */ 
-  /* Estilos Globales */
-  body {
-    background: url('tic-tac-toe-bg.png'), linear-gradient(-45deg, #0f0f0f, #1a1a1a, #121212, #1e1e1e);
-    background-size: cover;
-    animation: bg-animation 10s infinite alternate;
-    color: var(--color-text);
-    font-family: "Roboto", sans-serif;
-    text-align: center;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Estilos Globales */
+body {
+  color: var(--color-text);
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+}
+
+main {
+  width: 100%;
+}
+
+.bg-index-container {
+  background: url('/assets/tic-tac-toe-bg-9785597b.png'),
+  linear-gradient(-45deg, #0f0f0f, #1a1a1a, #121212, #1e1e1e);
+  background-size: cover;
+  animation: bg-animation 10s infinite alternate;
+  height: 100vh;
+  display: flex;
+}
+
+.index-container {
+  width: 95%;
+  height: 95vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 25px var(--color-secondary-hover);
+  border-radius: 8px;
+  margin: auto;
+  padding: auto;
+  border: white 1px solid;
+}
+  
+/* Animación de fondo */
+@keyframes bg-animation {
+  0% {
+    background-position: 0% 50%;
   }
-  
-  /* Animación de fondo */
-  @keyframes bg-animation {
-    0% {
-      background-position: 0% 50%;
-    }
-    100% {
-      background-position: 100% 50%;
-    }
+  100% {
+    background-position: 100% 50%;
   }
-  
-  /* Título con efecto de neón más llamativo */
-  .game-name {
-    font-size: 5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    line-height: 1.1;
-    text-shadow: 0 0 20px var(--color-primary), 0 0 40px var(--color-primary), 0 0 60px var(--color-primary);
-    animation: neon-glow 1.5s infinite alternate;
+}
+
+/* Título con efecto de neón más llamativo */
+.game-name {
+  font-size: 7rem;
+  font-weight: bold;
+  margin: 20px auto;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-shadow: 0 0 20px var(--color-primary), 0 0 40px var(--color-primary), 0 0 60px var(--color-primary);
+  animation: neon-glow 1.5s infinite alternate;
+}
+
+/* Ajuste del título en tres líneas */
+.game-name span {
+  display: block;
+}
+
+/* Fuente personalizada para el título */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.game-name {
+  font-family: "Press Start 2P", cursive;
+}
+
+/* Animación del título */
+@keyframes neon-glow {
+  0% {
+    text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary);
   }
-  
-  /* Ajuste del título en tres líneas */
-  .game-name span {
-    display: block;
+  100% {
+    text-shadow: 0 0 30px var(--color-primary), 0 0 50px var(--color-primary);
   }
-  
-  /* Fuente personalizada para el título */
-  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-  
-  .game-name {
-    font-family: "Press Start 2P", cursive;
-  }
-  
-  /* Animación del título */
-  @keyframes neon-glow {
-    0% {
-      text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary);
-    }
-    100% {
-      text-shadow: 0 0 30px var(--color-primary), 0 0 50px var(--color-primary);
-    }
-  }
-  
-  /* Estilos generales para los botones */
-  .mode-selector, .matches-history-btn {
-    display: inline-block;
-    padding: 12px 24px;
-    margin: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  /* Botón modo de juego */
-  .mode-selector {
-    background-color: var(--color-primary);
-    color: var(--color-text);
-    box-shadow: 0 0 15px var(--color-primary);
-  }
-  
-  /* Botón historial */
-  .matches-history-btn {
-    background-color: var(--color-secondary);
-    color: var(--color-text);
-    box-shadow: 0 0 15px var(--color-secondary);
-  }
-  
-  /* Efecto al pasar el mouse (hover) */
-  .mode-selector:hover,
-  .matches-history-btn:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Brillo extra en hover */
-  .mode-selector:hover {
-    background-color: var(--color-primary-hover);
-    box-shadow: 0 0 25px var(--color-primary-hover);
-  }
-  
-  .matches-history-btn:hover {
-    background-color: var(--color-secondary-hover);
-    box-shadow: 0 0 25px var(--color-secondary-hover);
-  }
-  
+}
+
+/* Estilos generales para los botones */
+.mode-selector, .matches-history-btn {
+  display: block;
+  padding: 12px 24px;
+  margin: 15px auto;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  width: 200px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Botón modo de juego */
+.mode-selector {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  box-shadow: 0 0 15px var(--color-primary);
+}
+
+/* Botón historial */
+.matches-history-btn {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+  box-shadow: 0 0 15px var(--color-secondary);
+}
+
+/* Efecto al pasar el mouse (hover) */
+.mode-selector:hover,
+.matches-history-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Brillo extra en hover */
+.mode-selector:hover {
+  background-color: var(--color-primary-hover);
+  box-shadow: 0 0 25px var(--color-primary-hover);
+}
+
+.matches-history-btn:hover {
+  background-color: var(--color-secondary-hover);
+  box-shadow: 0 0 25px var(--color-secondary-hover);
+}
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* ---------------------------------------- New page styles (Player's forms) ---------------------------------------- */
+.symbol-selection, .difficulty-selection {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.symbol-btn, .difficulty-btn {
+  padding: 10px 20px;
+  border: 2px solid #000;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  user-select: none;
+  border-radius: 5px;
+}
+
+.symbol-btn:hover, .difficulty-btn:hover {
+  background-color: #ddd;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + label {
+  background-color: #000;
+  color: #fff;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* ----------------------------------------- Show page styles (Matrix view) ----------------------------------------- */
