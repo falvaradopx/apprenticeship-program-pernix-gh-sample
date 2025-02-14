@@ -5,10 +5,9 @@ class GamesController < ApplicationController
   
   def create
     game_params = sanitize_game_params(params)
-    puts "Parametros #{game_params}"
     player1_name = game_params[:player1_name]     
     player1_symbol = game_params[:player1_symbol] 
-    player2_name = game_params[:player2_name].presence || "IA"
+    player2_name = game_params[:player2_name].presence || (lvl_difficulty(game_params[:difficulty]).capitalize + " Bot")
     player2_symbol = game_params[:player2_symbol].present? ? game_params[:player2_symbol] : game_params[:player1_symbol] == 'X' ? 'O' : 'X'
     difficulty = game_params[:difficulty] unless game_params[:player2_name].presence
 
@@ -16,6 +15,8 @@ class GamesController < ApplicationController
     puts "Juego creado: #{@game.get_game_data}"
     if @game.valid?
       session[:game] = @game.get_game_data
+      session[:draw] = false
+      session.delete(:match_id)  # Resetear el ID del Match
       redirect_to game_path
     else
       flash[:alert] = @game.errors.full_messages.join(", ")
@@ -37,6 +38,7 @@ class GamesController < ApplicationController
     game = session[:game] || {}  # Asegura que game no sea nil
     if game.present?
       @game = load_game_from_session
+      puts "Mostrando juego: #{@game.get_game_data}"
       # Si es un rematch y la IA debe iniciar, hacemos su movimiento antes de renderizar
       if @game.difficulty && @game.current_turn == @game.player2.symbol && @game.board.board.flatten.all?(&:nil?)
         result = @game.make_move(0, 0)
@@ -69,8 +71,11 @@ class GamesController < ApplicationController
     if game_data
       row, col = params[:row].to_i, params[:col].to_i
       puts "Se pidió movimiento a #{[row, col]}"
-  
       @game = load_game_from_session
+
+      if @game.difficulty && @game.current_turn == @game.player2.symbol
+        return
+      end
       result = @game.make_move(row, col)
   
       if result[:status] == :error
@@ -83,8 +88,8 @@ class GamesController < ApplicationController
             session[:draw] = true
             #flash[:notice] = result[:message] # Muestra mensaje de éxito
           end
-        elsif @game.difficulty && @game.current_turn == @game.player2.symbol
-          handle_ai_move
+        # elsif @game.difficulty && @game.current_turn == @game.player2.symbol
+        #   execute_ai_move
         end
       end
     end
@@ -92,20 +97,33 @@ class GamesController < ApplicationController
     redirect_to game_path
   end
 
+  def execute_ai_move
+    game = load_game_from_session
+    
+    # Verifica que la IA sea quien debe jugar
+    if game.difficulty && game.current_turn == game.player2.symbol
+      handle_ai_move
+    end
+
+    redirect_to game_path  # Redirige de vuelta al juego
+  end
+
+  # Método que maneja el movimiento de la IA
   def handle_ai_move
+    @game = load_game_from_session
+
     row_move, col_move = TictactoeAi.best_move(@game.board.board, @game.player2.symbol, @game.difficulty)
     puts "La IA mueve a #{[row_move, col_move]}"
-  
     result = @game.make_move(row_move, col_move)
     session[:game] = @game.get_game_data # Guarda el nuevo estado
-  
-    if result[:status] == :win 
+    
+    if result[:status] == :win
       save_match(@game)
     elsif result[:status] == :draw
       session[:draw] = true
-      #flash[:notice] = result[:message]
     end
   end
+  
 
   def restart
     puts "Reiniciando.................................."
@@ -113,15 +131,20 @@ class GamesController < ApplicationController
     @type = params[:type]
     session[:game] = @game.restart_game(@type).get_game_data
     session[:draw] = false
+    session.delete(:match_id)  # Resetear el ID del Match
     redirect_to game_path  # Redirige para actualizar la vista
   end
 
-  def exit
+  def back
     @game = load_game_from_session
     save_match(@game)  # Guarda el estado antes de salir
 
     session.delete(:game) # Borramos la sesión tras guardar la partida
     session.delete(:match_id)  # Resetear el ID del Match
+    redirect_to games_new_path(mode: @game.difficulty ? "singleplayer" : "multiplayer")
+  end
+
+  def exit
     redirect_to root_path
   end
 

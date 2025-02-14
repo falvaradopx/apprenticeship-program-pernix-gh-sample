@@ -1,62 +1,85 @@
 <div class="main-container">
-  <!--
-  <% if @mode == "singleplayer" %>
-    <p>Estás jugando contra la IA en modo <%= @difficulty %></p>
-  <% else %>
-    <p><%= @game.draws %> empates</p>
+  <%= button_to games_back_path, method: :post, class: "nav-btn exit-btn" do %>
+    <i class="fa-solid fa-arrow-left"></i>
+  <% end %> 
+  <div style="display:flex;justify-content:center;height:100px">
+    <% if @game.winner or session[:draw] %>
+      <%= button_to games_restart_path(type: "rematch"), method: :post, class: "nav-btn restart-btn" do %>
+        <i class="fa-solid fa-rotate-right"></i>
+      <% end %>
   <% end %>
-  -->
-  <%= button_to "Volver al menú principal", games_exit_path, method: :post, class: "modal_btn" %> 
-
-  <!-- Contenedor de jugadores -->
-  <div class="players-container">
-    <% [@game.player1, @game.player2].each do |player| %>
-      <div class="player-card <%= 'active-turn' if @game.current_turn == player.symbol %>">
-        <h3><%= player.name %></h3>
-        <p>Símbolo: <strong><%= player.symbol %></strong></p>
-        <p>Victorias: <strong><%= player.wins %></strong></p>
-      </div>
-    <% end %>
   </div>
-  <!--
-    <p class="turn-indicator">Turno actual: <%= @game.current_turn %></p>
-  -->
-  <% if @game.winner or session[:draw]  %>
-    <%= button_to "Volver a jugar", games_restart_path(type: "rematch"), method: :post, class: "modal_btn" %> 
-  <% else %>
-    <%= button_to "Reiniciar", games_restart_path(type: "restart"), method: :post, class: "restart_btn" %> 
-  <% end %>
 
-  <!-- Tablero del juego -->
-  <table class="matrix"> 
-    <% @game.board.board.each_with_index do |row, row_index| %>
-      <tr>
-        <% row.each_with_index do |ceil, col_index| %>
-          <td class = "<%='circle-mark' if ceil == 'O'%> <%='ex-mark' if ceil == 'X'%>" >
-          <div class = "<%='circle-mark' if ceil == 'O'%> <%='ex-mark' if ceil == 'X'%>">
-            <%= button_to "#{ceil}", games_move_path(row: row_index, col: col_index), method: :post, class: "ceil_btn ", disabled:(@game.winner.present? or session[:draw])%>
-          </div>
-          </td>
+  <div class="players-container">
+    <div class= "player1-card">
+      <div class="player-card <%= "#{@game.player1.symbol}-turn" if @game.current_turn == @game.player1.symbol %>">
+        <h3 class="player-name"><%= @game.player1.name %></h3>
+        <p class="player-symbol <%= @game.player1.symbol%>"><%= @game.player1.symbol %></p>
+        <p class="player-wins"><%= @game.player1.wins %></p>
+      </div>
+      <p class="under-profile-message">
+        <% if @game.winner %>
+          <% if @game.winner["symbol"] == @game.player1.symbol %>
+            Winner
+          <% else %>
+            Loser
+          <% end %>
+        <% elsif session[:draw] %>
+          Draw
+        <% elsif @game.current_turn == @game.player1.symbol%>
+          Your turn
         <% end %>
-      </tr>
-    <% end %>
-  </table>
-</div>
+      </p>
+    </div>
 
-<!-- Mensaje de ganador -->
-<% if @game.winner %>
-  <p class="winner-message">🎉 Ganó el jugador <strong><%= @game.winner["name"] %></strong> 🎉</p>
-<% end %>
-<% if session[:draw] %>
-  <p class="winner-message">🎉 Empate 🎉</p>
-<% end %>
+    <!-- Tablero del juego -->
+    <table class="matrix"> 
+      <% @game.board.board.each_with_index do |row, row_index| %>
+        <tr>
+          <% row.each_with_index do |ceil, col_index| %>
+            <td>
+              <div class="ceil <%='circle-mark' if ceil == 'O'%> <%='ex-mark' if ceil == 'X'%>">
+                <%= button_to "#{ceil}", games_move_path(row: row_index, col: col_index), method: :post, class: "ceil_btn", disabled:(@game.winner.present? or session[:draw])%>
+              </div>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+
+    <div class="player2-card">
+      <div class="player-card <%= "#{@game.player2.symbol}-turn" if @game.current_turn == @game.player2.symbol %>">
+        <h3 class="player-name"><%= @game.player2.name %></h3>
+        <p class="player-symbol <%= @game.player2.symbol%>"><%= @game.player2.symbol %></p>
+        <p class="player-wins"><%= @game.player2.wins %></p>
+      </div>
+      <p class="under-profile-message">
+        <% if @game.winner %>
+          <% if @game.winner["symbol"] == @game.player2.symbol %>
+            Winner
+          <% else %>
+            Loser
+          <% end %>
+        <% elsif session[:draw] %>
+          Draw
+        <% elsif @game.current_turn == @game.player2.symbol%>
+          <% if @game.difficulty%>
+            Bot Thinking...
+          <% else %>
+            Your turn
+          <%end%>
+        <% end %>
+      </p>
+    </div>
+  </div>
+</div>
 
 <!-- Modal para mensajes de error o alertas -->
 <% if flash[:alert] %>
   <div id="resultModal" class="modal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
       <p><%= flash[:notice] || flash[:alert] %></p> 
+      <span class="close-btn" onclick="closeModal()">&times;</span>
     </div>
   </div>
 
@@ -69,4 +92,30 @@
       document.getElementById("resultModal").style.display = "none";
     }
   </script>
+<% end %>
+<%= javascript_tag do %>
+  function ejecutarMovimientoIA() {
+    const currentTurn = "<%= @game.current_turn %>";
+    const aiSymbol = "<%= @game.player2.symbol %>";
+    const difficulty = "<%= @game.difficulty %>";
+
+    if (difficulty && currentTurn === aiSymbol) {
+      setTimeout(() => {
+        fetch("<%= games_execute_ai_move_path %>", {
+          method: "POST",
+          headers: {
+            "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
+            "Content-Type": "application/json"
+          }
+        })
+        .then(response => {
+          if (response.redirected) {
+            window.location.href = response.url; // Redirige después del movimiento
+          }
+        })
+        .catch(error => console.error("Error ejecutando movimiento de IA:", error));
+      }, 2000); // Simulación de "pensamiento"
+    }
+  }
+  document.addEventListener("turbo:render", ejecutarMovimientoIA);
 <% end %>

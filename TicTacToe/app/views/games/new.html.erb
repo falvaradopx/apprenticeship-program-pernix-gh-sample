@@ -1,4 +1,10 @@
+<div style="margin-top:30px">
+<%= button_to games_exit_path, method: :post, class: "nav-btn exit-btn" do %>
+  <i class="fa-solid fa-arrow-left"></i>
+<% end %> 
+</div>
 <div class="new-game-container">
+
 <h1>Configure game</h1>
 
 <% if @mode == "singleplayer" %>
@@ -26,7 +32,7 @@
         </div>
 
         <div class="difficulty-slider">
-          <input type="range" id="difficulty-range" min="0" max="2" step="1" value="0">
+          <input type="range" id="difficulty-range" name="difficulty" min="0" max="2" step="1" value="0">
           <div class="slider-labels">
             <span>Easy</span>
             <span>Medium</span>
@@ -82,6 +88,13 @@
 <% end %>
 
 <script>
+document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) {
+        console.log("Reactivando eventos...");
+        difficultyRange.addEventListener("input", actualizarDificultad);
+    }
+});
+
   document.addEventListener("DOMContentLoaded", function () {
     const difficultyRange = document.getElementById("difficulty-range");
     const difficultyImage = document.getElementById("difficulty-image");
@@ -89,12 +102,13 @@
     const difficultyImages = [
       "/assets/easy-f6589c40.png",      // Fácil
       "/assets/medium-8cc64828.png",    // Medio
-      "/assets/hard-286a9100.png"       // Imposible
+      "/assets/hard-34ba60c8.png"      // Imposible
     ];
 
     difficultyRange.addEventListener("input", function () {
       const difficultyInfo = document.querySelector('.difficulty-info');
-
+      console.log("Limpiando las clases:"+ difficultyInfo.classList);
+      console.log("Valor:"+ difficultyRange.value);
       // Limpiamos las sombras anteriores
       difficultyInfo.classList.remove('easy-selected', 'medium-selected', 'hard-selected');
 
