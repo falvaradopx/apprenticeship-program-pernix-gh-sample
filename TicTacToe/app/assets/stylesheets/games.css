@@ -28,6 +28,9 @@ main {
 }
 
 .index-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 95%;
   height: 95vh;
   background-color: rgba(0, 0, 0, 0.5);
@@ -99,6 +102,7 @@ main {
   color: white;
   box-shadow: 0 0 10px rgba(255, 165, 0, 0.8);
   margin-left: 30px;
+  margin-top: 30px;
   position: absolute;
 }
 
@@ -162,7 +166,13 @@ main {
 /* ------------------------------------------------------------------------------------------------------------------ */
 /* ---------------------------------------- New page styles (Player's forms) ---------------------------------------- */
 .new-game-container {
-  display: block;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.center-container {
 }
 /* Estilos del título */
 .new-game-container h1 {
@@ -406,10 +416,25 @@ input[type="radio"]:checked + label.o {
 .matrix{
     width: 50%;
     max-width: 530px;
+    min-width: 410px;
     border: 5px solid var(--color-border);
     border-radius: 8px;
     border-spacing: 5px;
     background-color: var(--color-border);
+}
+
+.restart-btn-container {
+  display:flex;
+  justify-content:center;
+  height:100px;
+  position:absolute;
+  top: 14%;
+  width: 100%;
+}
+
+.center-container {
+  height: 100%;
+  align-content: center;
 }
 
 .circle-mark button {
@@ -503,13 +528,15 @@ input[type="radio"]:checked + label.o {
 }
 
 .player-card.O-turn {
-  border-color: 3px solid #ff7f00;
+  border: 3px solid #ff7f00;
   box-shadow: 0px 0px 12px #ff7f00;
   transform: scale(1.05);
 }
 
 .main-container {
-  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .under-profile-message {
@@ -564,5 +591,77 @@ input[type="radio"]:checked + label.o {
 .player-card:hover {
   transform: scale(1.08);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------ Match history styles -------------------------------------------------- */
+.match-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.match-card {
+  width: 65%;
+  min-width: 500px;
+  height: fit-content;
+  background-color: var(--color-border);
+  margin: 20px auto;
+  padding: 20px 0;
+  border-radius: 10px;
+}
+
+.match-history {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.match-history .players-container {
+  display: flex;
+  margin: 0;
+  justify-content: space-evenly;
+}
+
+.match-history .players-container .player-symbol{
+  margin: 0;
+}
+
+.match-history .match-results {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  width: 100px;
+}
+
+.match-history .score-container {
+  display: flex;
+  justify-content: space-evenly;
+
+}
+
+.divider {
+  border: 1px solid black;
+  height: auto;
+}
+
+.match-datetime {
+  margin: 10px 0 0 0;
+}
+
+.score-text {
+  font-family: 'FontAwesome';
+  letter-spacing: 3px;
+}
+
+.score {
+  font-family: 'FontAwesome';
+  margin: 10px auto;
+  font-size: 30px;
+}
+
+.draws, .match-datetime {
+  font-family: 'FontAwesome';
+  font-size: 12px;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */

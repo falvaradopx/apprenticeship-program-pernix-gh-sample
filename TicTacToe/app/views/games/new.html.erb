@@ -1,91 +1,93 @@
-<div style="margin-top:30px">
+<div>
 <%= button_to games_exit_path, method: :post, class: "nav-btn exit-btn" do %>
   <i class="fa-solid fa-arrow-left"></i>
 <% end %> 
 </div>
 <div class="new-game-container">
+  <h1>Configure game</h1>
 
-<h1>Configure game</h1>
+  <div>
 
-<% if @mode == "singleplayer" %>
-<form action="/games" method="post">
-  <div class="content">
-    <div class="player-info player1">
-      <h3>Player</h3>
-      <label for="player1_name">Name</label>
-      <input type="text" id="player1_name" name="player1_name" required>
+  <% if @mode == "singleplayer" %>
+  <form action="/games" method="post">
+    <div class="content">
+      <div class="player-info player1">
+        <h3>Player</h3>
+        <label for="player1_name">Name</label>
+        <input type="text" id="player1_name" name="player1_name" required>
 
-      <label>Symbol</label>
-      <div class="symbol-selection">
-        <input type="radio" id="p_x" name="player1_symbol" value="X" required onclick="singlePlayerSymbolSelect('p_x')">
-        <label for="p_x" class="symbol-btn x">X</label>
+        <label>Symbol</label>
+        <div class="symbol-selection">
+          <input type="radio" id="p_x" name="player1_symbol" value="X" required onclick="singlePlayerSymbolSelect('p_x')">
+          <label for="p_x" class="symbol-btn x">X</label>
 
-        <input type="radio" id="p_o" name="player1_symbol" value="O" required onclick="singlePlayerSymbolSelect('p_o')">
-        <label for="p_o" class="symbol-btn o">O</label>
-      </div>
-    </div>
-    <div class="difficulty-info">
-      <div class="difficulty-container">
-        <h3 class="difficulty-title">Bot Difficulty</h3>
-        <div class="difficulty-display">
-          <img id="difficulty-image" src="/assets/easy-f6589c40.png" alt="Easy">
+          <input type="radio" id="p_o" name="player1_symbol" value="O" required onclick="singlePlayerSymbolSelect('p_o')">
+          <label for="p_o" class="symbol-btn o">O</label>
         </div>
+      </div>
+      <div class="difficulty-info">
+        <div class="difficulty-container">
+          <h3 class="difficulty-title">Bot Difficulty</h3>
+          <div class="difficulty-display">
+            <img id="difficulty-image" src="/assets/easy-f6589c40.png" alt="Easy">
+          </div>
 
-        <div class="difficulty-slider">
-          <input type="range" id="difficulty-range" name="difficulty" min="0" max="2" step="1" value="0">
-          <div class="slider-labels">
-            <span>Easy</span>
-            <span>Medium</span>
-            <span>Impossible</span>
+          <div class="difficulty-slider">
+            <input type="range" id="difficulty-range" name="difficulty" min="0" max="2" step="1" value="0">
+            <div class="slider-labels">
+              <span>Easy</span>
+              <span>Medium</span>
+              <span>Impossible</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <button type="submit">Comenzar</button>
-</form>
-
-<% elsif @mode == "multiplayer" %>
-  <form action="/games" method="post">
-  <div class="content">
-    <div class="player-info player1">
-      <h3>Player 1</h3>
-      <label for="player1_name">Name</label>
-      <input type="text" id="player1_name" name="player1_name" required>
-
-      <label>Symbol</label>
-      <div class="symbol-selection">
-        <input type="radio" id="p1_x" name="player1_symbol" value="X" required onclick="autoSelect('p1_x')">
-        <label for="p1_x" class="symbol-btn x">X</label>
-
-        <input type="radio" id="p1_o" name="player1_symbol" value="O" required onclick="autoSelect('p1_o')">
-        <label for="p1_o" class="symbol-btn o">O</label>
-      </div>
-    </div>
-
-    <div class="player-info player2">
-      <h3>Player 2</h3>
-
-      <label for="player2_name">Name</label>
-      <input type="text" id="player2_name" name="player2_name" required>
-
-      <label>Symbol</label>
-      <div class="symbol-selection">
-        <input type="radio" id="p2_x" name="player2_symbol" value="X" required onclick="autoSelect('p2_x')">
-        <label for="p2_x" class="symbol-btn x">X</label>
-
-        <input type="radio" id="p2_o" name="player2_symbol" value="O" required onclick="autoSelect('p2_o')">
-        <label for="p2_o" class="symbol-btn o">O</label>
-      </div>
-    </div>
-
-  </div>
-
-
     <button type="submit">Comenzar</button>
   </form>
+
+  <% elsif @mode == "multiplayer" %>
+    <form action="/games" method="post">
+    <div class="content">
+      <div class="player-info player1">
+        <h3>Player 1</h3>
+        <label for="player1_name">Name</label>
+        <input type="text" id="player1_name" name="player1_name" required>
+
+        <label>Symbol</label>
+        <div class="symbol-selection">
+          <input type="radio" id="p1_x" name="player1_symbol" value="X" required onclick="autoSelect('p1_x')">
+          <label for="p1_x" class="symbol-btn x">X</label>
+
+          <input type="radio" id="p1_o" name="player1_symbol" value="O" required onclick="autoSelect('p1_o')">
+          <label for="p1_o" class="symbol-btn o">O</label>
+        </div>
+      </div>
+
+      <div class="player-info player2">
+        <h3>Player 2</h3>
+
+        <label for="player2_name">Name</label>
+        <input type="text" id="player2_name" name="player2_name" required>
+
+        <label>Symbol</label>
+        <div class="symbol-selection">
+          <input type="radio" id="p2_x" name="player2_symbol" value="X" required onclick="autoSelect('p2_x')">
+          <label for="p2_x" class="symbol-btn x">X</label>
+
+          <input type="radio" id="p2_o" name="player2_symbol" value="O" required onclick="autoSelect('p2_o')">
+          <label for="p2_o" class="symbol-btn o">O</label>
+        </div>
+      </div>
+
+    </div>
+
+
+      <button type="submit">Comenzar</button>
+    </form>
+  <% end %>
+  </div>
 </div>
-<% end %>
 
 <script>
 document.addEventListener("visibilitychange", function () {

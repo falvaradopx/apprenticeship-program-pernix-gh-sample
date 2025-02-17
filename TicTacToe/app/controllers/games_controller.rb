@@ -82,14 +82,10 @@ class GamesController < ApplicationController
         flash[:alert] = result[:message] # Muestra error en el frontend
       else
         session[:game] = @game.get_game_data # Guarda el nuevo estado
-        if result[:status] == :win or result[:status] == :draw
+        if result[:status] == :win
           save_match(@game)  # Guarda o actualiza el marcador
-          if result[:status] == :draw
-            session[:draw] = true
-            #flash[:notice] = result[:message] # Muestra mensaje de éxito
-          end
-        # elsif @game.difficulty && @game.current_turn == @game.player2.symbol
-        #   execute_ai_move
+        elsif result[:status] == :draw
+          session[:draw] = true
         end
       end
     end
@@ -131,13 +127,15 @@ class GamesController < ApplicationController
     @type = params[:type]
     session[:game] = @game.restart_game(@type).get_game_data
     session[:draw] = false
-    session.delete(:match_id)  # Resetear el ID del Match
     redirect_to game_path  # Redirige para actualizar la vista
   end
 
   def back
     @game = load_game_from_session
-    save_match(@game)  # Guarda el estado antes de salir
+    if @game.player1.wins > 0 or @game.player2.wins > 0 or @game.draws > 0
+      puts "Guarda la partida"
+      save_match(@game)  # Guarda el estado antes de salir
+    end
 
     session.delete(:game) # Borramos la sesión tras guardar la partida
     session.delete(:match_id)  # Resetear el ID del Match
