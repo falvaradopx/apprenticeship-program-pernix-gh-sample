@@ -1,23 +1,32 @@
-<h1>Historial de Partidas</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Jugador 1</th>
-      <th>Jugador 2</th>
-      <th>Dificultad</th>
-      <th>Empates</th>
-      <th>Fecha</th>
-    </tr>
-  </thead>
-  <tbody>
+<div class="match-history">
+  <%= button_to games_exit_path, method: :post, class: "nav-btn exit-btn" do %>
+    <i class="fa-solid fa-arrow-left"></i>
+  <% end %> 
+  <h1>Last 10 matches</h1>
+  <div class="match-container">
     <% @matches.each do |match| %>
-      <tr>
-        <td><%= match.player1_name %> (<%= match.player1_symbol %>) (<%= match.player1_wins %>)</td>
-        <td><%= match.player2_name %> (<%= match.player2_symbol %>) (<%= match.player2_wins %>)</td>
-        <td><%= match.difficulty || "N/A" %></td>
-        <td><%= match.draws %></td>
-        <td><%= match.updated_at.strftime("%d/%m/%Y %H:%M") %></td>
-      </tr>
+      <div class="match-card">
+        <div class="players-container">
+          <div class="player-card <%= match.player1_symbol%>-turn">
+            <h3 class="player-name"><%= match.player1_name %></h3>
+            <p class="player-symbol <%= match.player1_symbol%>"><%= match.player1_symbol %></p>
+          </div>
+          <div class="match-results">
+            <h4 class="score-text">SCORE</h4>
+            <div class="score-container">
+              <p class="score"><%= match.player1_wins %></p>
+              <div class="divider"></div>
+              <p class="score"><%= match.player2_wins %></p>
+            </div>
+            <p class="draws"><%= match.draws %> draws</p>
+          </div>
+          <div class="player-card <%= match.player2_symbol%>-turn">
+            <h3 class="player-name"><%= match.player2_name %></h3>
+            <p class="player-symbol <%= match.player2_symbol%>"><%= match.player2_symbol %></p>
+          </div>
+        </div>
+        <p class="match-datetime"><%= match.updated_at.strftime("%d/%m/%Y %H:%M") %></p>
+      </div>
     <% end %>
-  </tbody>
-</table>
+  </div>
+</div>

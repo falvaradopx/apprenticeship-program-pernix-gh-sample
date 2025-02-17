@@ -1,0 +1,73 @@
+
+/* ------------------------------------------ Match history styles -------------------------------------------------- */
+.match-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+  }
+  
+  .match-card {
+    width: 65%;
+    min-width: 500px;
+    height: fit-content;
+    background-color: var(--color-border);
+    margin: 20px auto;
+    padding: 20px 0;
+    border-radius: 10px;
+  }
+  
+  .match-history {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .match-history .players-container {
+    display: flex;
+    margin: 0;
+    justify-content: space-evenly;
+  }
+  
+  .match-history .players-container .player-symbol{
+    margin: 0;
+  }
+  
+  .match-history .match-results {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    width: 100px;
+  }
+  
+  .match-history .score-container {
+    display: flex;
+    justify-content: space-evenly;
+  
+  }
+  
+  .divider {
+    border: 1px solid black;
+    height: auto;
+  }
+  
+  .match-datetime {
+    margin: 10px 0 0 0;
+  }
+  
+  .score-text {
+    font-family: 'FontAwesome';
+    letter-spacing: 3px;
+  }
+  
+  .score {
+    font-family: 'FontAwesome';
+    margin: 10px auto;
+    font-size: 30px;
+  }
+  
+  .draws, .match-datetime {
+    font-family: 'FontAwesome';
+    font-size: 12px;
+  }
+  /* ------------------------------------------------------------------------------------------------------------------ */

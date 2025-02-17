@@ -8,3 +8,37 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+ /*
+ *= require_tree .
+ *= require_self
+ */
+
+:root {
+  --color-bg: #121212; /* Fondo oscuro */
+  --color-text: #ffffff; /* Texto principal */
+  --color-primary: #ff6a00; /* Naranja neón */
+  --color-primary-hover: #cc5500; /* Naranja más oscuro */
+  --color-secondary: #00aaff; /* Azul neón */
+  --color-secondary-hover: #0088cc; /* Azul más oscuro */
+  --color-border: #444;
+  --color-hover: #ffcc00;
+}
+
+body {
+  color: var(--color-text);
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg);
+}
+
+main {
+  width: 100%;
+  height: 100%;
+}
+  
